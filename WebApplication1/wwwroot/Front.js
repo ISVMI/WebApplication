@@ -25,7 +25,7 @@ async function getTasks() {
         const tasks = await response.json();
         const rows = document.querySelector("tbody");
         // добавляем полученные элементы в таблицу
-        tasks.forEach(task => { rows.append(row(task)); console.log(task); });
+        tasks.forEach(task => rows.append(row(task)));
 
     }
 }
@@ -37,6 +37,7 @@ async function getTask(id) {
     });
     if (response.ok === true) {
         const task = await response.json();
+        document.getElementById("addTask").value = "Сохранить";
         document.getElementById("taskId").value = task.id;
         document.getElementById("task").value = task.name;
         document.getElementById("taskDescription").value = task.description;
@@ -98,6 +99,7 @@ async function editTask(taskId, taskName, taskDescription, taskPriority, taskIsC
     if (response.ok === true) {
         const task = await response.json();
         document.querySelector(`tr[data-rowid="${task.id}"]`).replaceWith(row(task));
+
     }
     else {
         const error = await response.json();
@@ -257,6 +259,7 @@ document.getElementById("addTask").addEventListener("click", async () => {
     if (id === "")
         await createTask(name, description, priority, IsCompleted);
     else {
+        document.getElementById("addTask").value = "Добавить задачу"
         taskRow = document.querySelector(`tr[data-rowid="${id}"]`);
         if (taskRow.cells[3].textContent === "да")
             IsCompleted = true;
